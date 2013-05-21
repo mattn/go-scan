@@ -11,7 +11,7 @@ var ScanTests = []struct {
 	j string
 	p string
 	v interface{}
-} {
+}{
 	{
 		"foo",
 		"bar",
@@ -22,7 +22,7 @@ var ScanTests = []struct {
 func TestScanString(t *testing.T) {
 	var a interface{}
 	j :=
-`
+		`
 "foo"
 `
 	err := json.Unmarshal([]byte(j), &a)
@@ -42,7 +42,7 @@ func TestScanString(t *testing.T) {
 func TestScanFloat64(t *testing.T) {
 	var a interface{}
 	j :=
-`
+		`
 123
 `
 	err := json.Unmarshal([]byte(j), &a)
@@ -62,7 +62,7 @@ func TestScanFloat64(t *testing.T) {
 func TestScanTreeMap(t *testing.T) {
 	var a interface{}
 	j :=
-`
+		`
 {"foo":{"bar": "baz"}}
 `
 	err := json.Unmarshal([]byte(j), &a)
@@ -82,7 +82,7 @@ func TestScanTreeMap(t *testing.T) {
 func TestScanTreeSliceOfString(t *testing.T) {
 	var a interface{}
 	j :=
-`
+		`
 {"foo":{"bar": ["baz", "baba"]}}
 `
 	err := json.Unmarshal([]byte(j), &a)
@@ -102,7 +102,7 @@ func TestScanTreeSliceOfString(t *testing.T) {
 func TestScanTreeSliceOfFloat64(t *testing.T) {
 	var a interface{}
 	j :=
-`
+		`
 {"foo":{"bar": [3, 2, 1]}}
 `
 	err := json.Unmarshal([]byte(j), &a)
