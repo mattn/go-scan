@@ -32,12 +32,12 @@ func Scan(v interface{}, t interface{}) (err error) {
 	return nil
 }
 
-func ScanTree(v interface{}, jp string, t interface{}) (err error) {
-	if jp == "" {
+func ScanTree(v interface{}, p string, t interface{}) (err error) {
+	if p == "" {
 		return errors.New("invalid path")
 	}
 	var ok bool
-	for _, token := range strings.Split(jp, "/") {
+	for _, token := range strings.Split(p, "/") {
 		sl := re.FindAllStringSubmatch(token, -1)
 		if len(sl) == 0 {
 			return errors.New("invalid path")
