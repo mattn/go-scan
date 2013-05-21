@@ -1,21 +1,36 @@
 package main
 
 import (
-	"encoding/json"
 	"github.com/mattn/go-scan"
+	"strings"
 )
 
-func main() {
-	var a interface{}
-	json.Unmarshal([]byte(`
+var js = strings.NewReader(`
 {
-	"foo": ["baz"]
+	"foo": {
+		"bar": [
+			{
+				"baz": "bbb",
+				"noo": 3 
+			},
+			{
+				"maz": true,
+				"moo": ["foo", "bar"]
+			}
+		],
+		"boo": {
+			"bag": "ddd",
+			"bug": "ccc"
+		}
+	}
 }
-`), &a)
+`)
 
+func main() {
 	var s []string
-	if err := scan.ScanTree(a, "/foo", &s); err != nil {
+	if err := scan.ScanJSON(js, "/foo/bar[1]/moo", &s); err != nil {
 		println(err.Error())
 	}
-	println(s[0])
+	println(s[0]) // should be "foo"
+	println(s[1]) // should be "bar"
 }
