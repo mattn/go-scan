@@ -4,6 +4,7 @@ import (
 	"."
 	"encoding/json"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -39,6 +40,25 @@ func TestScanString(t *testing.T) {
 	}
 }
 
+func TestScanBool(t *testing.T) {
+	var a interface{}
+	j :=
+		`
+true
+`
+	err := json.Unmarshal([]byte(j), &a)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var b bool
+	err = scan.Scan(a, &b)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !b {
+		t.Fatalf("Expected %v for Scan, but %v:", true, b)
+	}
+}
 func TestScanFloat64(t *testing.T) {
 	var a interface{}
 	j :=
@@ -111,6 +131,18 @@ func TestScanTreeSliceOfFloat64(t *testing.T) {
 	}
 	var f []float64
 	err = scan.ScanTree(a, "/foo/bar", &f)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual([]float64{3, 2, 1}, f) {
+		t.Fatalf("Expected %v for Scan, but %v:", `[3, 2, 1]`, f)
+	}
+}
+
+func TestScanJSON(t *testing.T) {
+	s := `{"foo":{"bar": [3, 2, 1]}}`
+	var f []float64
+	err := scan.ScanJSON(strings.NewReader(s), "/foo/bar", &f)
 	if err != nil {
 		t.Fatal(err)
 	}

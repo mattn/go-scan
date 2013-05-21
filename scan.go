@@ -1,7 +1,9 @@
 package scan
 
 import (
+	"encoding/json"
 	"errors"
+	"io"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -73,4 +75,12 @@ func ScanTree(v interface{}, p string, t interface{}) (err error) {
 	}
 
 	return Scan(v, t)
+}
+
+func ScanJSON(r io.Reader, p string, t interface{}) (err error) {
+	var a interface{}
+	if err = json.NewDecoder(r).Decode(&a); err != nil {
+		return
+	}
+	return ScanTree(a, p, t)
 }
