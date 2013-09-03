@@ -164,6 +164,11 @@ func TestScanJSONError(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
+	sr := strings.NewReader("")
+	err = scan.ScanJSON(sr, "/", nil)
+	if err == nil {
+		t.Fatalf("Expected error but not")
+	}
 }
 
 func TestInvalidPath(t *testing.T) {
