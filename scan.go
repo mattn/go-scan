@@ -57,7 +57,11 @@ func ScanTree(v interface{}, p string, t interface{}) (err error) {
 		}
 		ss := sl[0]
 		if ss[1] != "" {
-			if v, ok = v.(map[string]interface{})[ss[1]]; !ok {
+			var vm map[string]interface{}
+			if vm, ok = v.(map[string]interface{}); !ok {
+				return errors.New("invalid path: " + ss[1])
+			}
+			if v, ok = vm[ss[1]]; !ok {
 				return errors.New("invalid path: " + ss[1])
 			}
 		}
@@ -69,9 +73,17 @@ func ScanTree(v interface{}, p string, t interface{}) (err error) {
 			var vl []interface{}
 			if vl, ok = v.([]interface{}); !ok {
 				if vm, ok := v.(map[string]interface{}); ok {
+					n, found := 0, false
 					for _, vv := range vm {
-						v = vv
-						break
+						if n == i {
+							found = true
+							v = vv
+							break
+						}
+						n++
+					}
+					if !found {
+						return errors.New("invalid path: " + ss[2])
 					}
 				} else {
 					return errors.New("invalid path: " + ss[2])
