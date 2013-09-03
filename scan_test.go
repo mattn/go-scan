@@ -207,4 +207,8 @@ func TestInvalidPath(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
+	err = scan.ScanJSON(strings.NewReader(s), "/foo[9]", &f)
+	if err == nil {
+		t.Fatalf("Expected error but not")
+	}
 }
