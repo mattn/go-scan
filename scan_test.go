@@ -165,3 +165,22 @@ func TestScanJSONError(t *testing.T) {
 		t.Fatalf("Expected error but not")
 	}
 }
+
+func TestInvalidPath(t *testing.T) {
+	err := scan.ScanTree(nil, "", nil)
+	if err == nil {
+		t.Fatalf("Expected error but not")
+	}
+	err = scan.ScanTree(nil, "a", nil)
+	if err == nil {
+		t.Fatalf("Expected error but not")
+	}
+	err = scan.ScanTree(nil, "/[a]", nil)
+	if err == nil {
+		t.Fatalf("Expected error but not")
+	}
+	err = scan.ScanTree(nil, "/a", nil)
+	if err == nil {
+		t.Fatalf("Expected error but not")
+	}
+}
