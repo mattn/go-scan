@@ -15,9 +15,7 @@ var re = regexp.MustCompile("^([^0-9\\s\\[][^\\s\\[]*)?(\\[[0-9]+\\])?$")
 func Scan(v interface{}, t interface{}) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			if e, ok := r.(string); ok {
-				err = errors.New(e)
-			} else if e, ok := r.(error); ok {
+			if e, ok := r.(error); ok {
 				err = e
 			}
 			err = errors.New("Unknown error")
@@ -42,9 +40,7 @@ func Scan(v interface{}, t interface{}) (err error) {
 func ScanTree(v interface{}, p string, t interface{}) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			if e, ok := r.(string); ok {
-				err = errors.New(e)
-			} else if e, ok := r.(error); ok {
+			if e, ok := r.(error); ok {
 				err = e
 			}
 			err = errors.New("Unknown error")
@@ -95,9 +91,7 @@ func ScanTree(v interface{}, p string, t interface{}) (err error) {
 func ScanJSON(r io.Reader, p string, t interface{}) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			if e, ok := r.(string); ok {
-				err = errors.New(e)
-			} else if e, ok := r.(error); ok {
+			if e, ok := r.(error); ok {
 				err = e
 			}
 			err = errors.New("Unknown error")
