@@ -155,6 +155,13 @@ func TestScanPanic(t *testing.T) {
 	var b bool
 	err := scan.Scan(nil, &b)
 	if err == nil {
-		t.Fatalf("Expected panic but not")
+		t.Fatalf("Expected error but not")
+	}
+}
+
+func TestScanJSONError(t *testing.T) {
+	err := scan.ScanJSON(nil, "", nil)
+	if err == nil {
+		t.Fatalf("Expected error but not")
 	}
 }
