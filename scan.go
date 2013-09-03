@@ -13,15 +13,20 @@ import (
 var re = regexp.MustCompile("^([^0-9\\s\\[][^\\s\\[]*)?(\\[[0-9]+\\])?$")
 
 func Scan(v interface{}, t interface{}) (err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			if e, ok := r.(string); ok {
+				err = errors.New(e)
+			} else if e, ok := r.(error); ok {
+				err = e
+			}
+			err = errors.New("Unknown error")
+		}
+	}()
 	rt := reflect.ValueOf(t).Elem()
 	rv := reflect.ValueOf(v)
 	tv := rv.Type().Kind()
 
-	defer func() {
-		if errstr := recover(); errstr != nil {
-			err = errors.New(errstr.(string))
-		}
-	}()
 	if tv == reflect.Slice || tv == reflect.Array {
 		ia := rv.Interface().([]interface{})
 		rt.Set(reflect.MakeSlice(rt.Type(), len(ia), len(ia)))
