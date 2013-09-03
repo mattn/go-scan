@@ -150,3 +150,11 @@ func TestScanJSON(t *testing.T) {
 		t.Fatalf("Expected %v for Scan, but %v:", `[3, 2, 1]`, f)
 	}
 }
+
+func TestScanPanic(t *testing.T) {
+	var b bool
+	err := scan.Scan(nil, &b)
+	if err == nil {
+		t.Fatalf("Expected panic but not")
+	}
+}
