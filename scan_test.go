@@ -188,4 +188,19 @@ func TestInvalidPath(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
+
+	s := `{"foo":{"bar": [3, 2, 1]}}`
+	var f []float64
+	err = scan.ScanJSON(strings.NewReader(s), "/fooo/bar", &f)
+	if err == nil {
+		t.Fatalf("Expected error but not")
+	}
+	err = scan.ScanJSON(strings.NewReader(s), "/foo[999999999999999999999999999999999999999]", &f)
+	if err == nil {
+		t.Fatalf("Expected error but not")
+	}
+	err = scan.ScanJSON(strings.NewReader(s), "/foo/bar[0]/[0]", &f)
+	if err == nil {
+		t.Fatalf("Expected error but not")
+	}
 }
