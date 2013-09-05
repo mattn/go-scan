@@ -12,14 +12,20 @@ import (
 
 var re = regexp.MustCompile("^([^0-9\\s\\[][^\\s\\[]*)?(\\[[0-9]+\\])?$")
 
+func toError(v interface{}) error {
+	if v != nil {
+		if e, ok := v.(error); ok {
+			return e
+		}
+		return errors.New("Unknown error")
+	}
+	return nil
+}
+
 func Scan(v interface{}, t interface{}) (err error) {
 	defer func() {
-		if r := recover(); r != nil {
-			if e, ok := r.(error); ok {
-				err = e
-				return
-			}
-			err = errors.New("Unknown error")
+		if err == nil {
+			err = toError(recover())
 		}
 	}()
 	rt := reflect.ValueOf(t).Elem()
@@ -40,12 +46,8 @@ func Scan(v interface{}, t interface{}) (err error) {
 
 func ScanTree(v interface{}, p string, t interface{}) (err error) {
 	defer func() {
-		if r := recover(); r != nil {
-			if e, ok := r.(error); ok {
-				err = e
-				return
-			}
-			err = errors.New("Unknown error")
+		if err == nil {
+			err = toError(recover())
 		}
 	}()
 	if p == "" {
@@ -104,17 +106,13 @@ func ScanTree(v interface{}, p string, t interface{}) (err error) {
 
 func ScanJSON(r io.Reader, p string, t interface{}) (err error) {
 	defer func() {
-		if r := recover(); r != nil {
-			if e, ok := r.(error); ok {
-				err = e
-				return
-			}
-			err = errors.New("Unknown error")
+		if err == nil {
+			err = toError(recover())
 		}
 	}()
 	var a interface{}
 	if err = json.NewDecoder(r).Decode(&a); err != nil {
-		return
+		return err
 	}
 	return ScanTree(a, p, t)
 }
