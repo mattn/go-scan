@@ -1,6 +1,7 @@
-package main
+package scan_test
 
 import (
+	"fmt"
 	"github.com/mattn/go-scan"
 	"strings"
 )
@@ -26,11 +27,11 @@ var js = strings.NewReader(`
 }
 `)
 
-func main() {
+func Example() {
 	var s []string
 	if err := scan.ScanJSON(js, "/foo/bar[1]/moo", &s); err != nil {
 		println(err.Error())
 	}
-	println(s[0]) // should be "foo"
-	println(s[1]) // should be "bar"
+	fmt.Println(s[0]) // should be "foo"
+	fmt.Println(s[1]) // should be "bar"
 }

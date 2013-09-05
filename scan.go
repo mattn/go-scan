@@ -42,6 +42,7 @@ func ScanTree(v interface{}, p string, t interface{}) (err error) {
 		if r := recover(); r != nil {
 			if e, ok := r.(error); ok {
 				err = e
+				return
 			}
 			err = errors.New("Unknown error")
 		}
