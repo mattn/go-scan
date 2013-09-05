@@ -170,6 +170,36 @@ func TestScanJSONError(t *testing.T) {
 	}
 }
 
+func TestIndexWithMap(t *testing.T) {
+	var js = strings.NewReader(`
+{
+	"foo": {
+		"bar": [
+			{
+				"baz": "bbb",
+				"noo": 3 
+			},
+			{
+				"maz": true,
+				"moo": ["foo", "bar"]
+			}
+		],
+		"boo": {
+			"bag": "ddd",
+			"bug": "ccc"
+		}
+	}
+}
+`)
+	var s string
+	if err := ScanJSON(js, "/foo[1]/bag", &s); err != nil {
+		t.Fatal(err)
+	}
+	if s != "ddd" {
+		t.Fatalf(`Expected "ddd" but not`)
+	}
+}
+
 func TestInvalidPath(t *testing.T) {
 	err := Scan(nil, nil)
 	if err == nil {
