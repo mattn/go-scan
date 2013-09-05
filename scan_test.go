@@ -1,7 +1,6 @@
-package scan_test
+package scan
 
 import (
-	"."
 	"encoding/json"
 	"reflect"
 	"strings"
@@ -31,7 +30,7 @@ func TestScanString(t *testing.T) {
 		t.Fatal(err)
 	}
 	var s string
-	err = scan.Scan(a, &s)
+	err = Scan(a, &s)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -51,7 +50,7 @@ true
 		t.Fatal(err)
 	}
 	var b bool
-	err = scan.Scan(a, &b)
+	err = Scan(a, &b)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -70,7 +69,7 @@ func TestScanFloat64(t *testing.T) {
 		t.Fatal(err)
 	}
 	var f float64
-	err = scan.Scan(a, &f)
+	err = Scan(a, &f)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -90,7 +89,7 @@ func TestScanTreeMap(t *testing.T) {
 		t.Fatal(err)
 	}
 	var s string
-	err = scan.ScanTree(a, "/foo/bar", &s)
+	err = ScanTree(a, "/foo/bar", &s)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -110,7 +109,7 @@ func TestScanTreeSliceOfString(t *testing.T) {
 		t.Fatal(err)
 	}
 	var s []string
-	err = scan.ScanTree(a, "/foo/bar", &s)
+	err = ScanTree(a, "/foo/bar", &s)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -130,7 +129,7 @@ func TestScanTreeSliceOfFloat64(t *testing.T) {
 		t.Fatal(err)
 	}
 	var f []float64
-	err = scan.ScanTree(a, "/foo/bar", &f)
+	err = ScanTree(a, "/foo/bar", &f)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -142,7 +141,7 @@ func TestScanTreeSliceOfFloat64(t *testing.T) {
 func TestScanJSON(t *testing.T) {
 	s := `{"foo":{"bar": [3, 2, 1]}}`
 	var f []float64
-	err := scan.ScanJSON(strings.NewReader(s), "/foo/bar", &f)
+	err := ScanJSON(strings.NewReader(s), "/foo/bar", &f)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -153,86 +152,96 @@ func TestScanJSON(t *testing.T) {
 
 func TestScanPanic(t *testing.T) {
 	var b bool
-	err := scan.Scan(nil, &b)
+	err := Scan(nil, &b)
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
 }
 
 func TestScanJSONError(t *testing.T) {
-	err := scan.ScanJSON(nil, "", nil)
+	err := ScanJSON(nil, "", nil)
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
 	sr := strings.NewReader("")
-	err = scan.ScanJSON(sr, "/", nil)
+	err = ScanJSON(sr, "/", nil)
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
 }
 
 func TestInvalidPath(t *testing.T) {
-	err := scan.Scan(nil, nil)
+	err := Scan(nil, nil)
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
-	err = scan.ScanTree(nil, "", nil)
+	err = ScanTree(nil, "", nil)
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
-	err = scan.ScanJSON(nil, "", nil)
+	err = ScanJSON(nil, "", nil)
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
-	err = scan.ScanTree(nil, "a", nil)
+	err = ScanTree(nil, "a", nil)
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
-	err = scan.ScanJSON(nil, "a", nil)
+	err = ScanJSON(nil, "a", nil)
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
-	err = scan.ScanTree(nil, "/[a]", nil)
+	err = ScanTree(nil, "/[a]", nil)
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
-	err = scan.ScanJSON(nil, "/[a]", nil)
+	err = ScanJSON(nil, "/[a]", nil)
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
-	err = scan.ScanTree(nil, "/a", nil)
+	err = ScanTree(nil, "/a", nil)
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
-	err = scan.ScanJSON(nil, "/a", nil)
+	err = ScanJSON(nil, "/a", nil)
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
 
 	s := `{"foo":{"bar": [3, 2, 1]}}`
 	var f []float64
-	err = scan.ScanJSON(strings.NewReader(s), "/fooo/bar", &f)
+	err = ScanJSON(strings.NewReader(s), "/fooo/bar", &f)
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
-	err = scan.ScanJSON(strings.NewReader(s), "/foo[999999999999999999999999999999999999999]", &f)
+	err = ScanJSON(strings.NewReader(s), "/foo[999999999999999999999999999999999999999]", &f)
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
-	err = scan.ScanJSON(strings.NewReader(s), "/foo/bar[0]/[0]", &f)
+	err = ScanJSON(strings.NewReader(s), "/foo/bar[0]/[0]", &f)
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
-	err = scan.ScanJSON(strings.NewReader(s), "/foo/bar[20]", &f)
+	err = ScanJSON(strings.NewReader(s), "/foo/bar[20]", &f)
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
-	err = scan.ScanJSON(strings.NewReader(s), "/foo[9]", &f)
+	err = ScanJSON(strings.NewReader(s), "/foo[9]", &f)
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
-	err = scan.ScanJSON(strings.NewReader(s), "[9]", nil)
+	err = ScanJSON(strings.NewReader(s), "[9]", nil)
 	if err == nil {
 		t.Fatalf("Expected error but not")
+	}
+}
+
+func TestToError(t *testing.T) {
+	err := toError(1)
+	if err == nil {
+		t.Fatalf("Expected error but not")
+	}
+	if err.Error() != "Unknown error" {
+		t.Fatalf("Expected unknown error but not")
 	}
 }
