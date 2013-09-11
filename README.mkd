@@ -6,8 +6,8 @@ go-scan
 
 Easily way to get the elements via xpath like string
 
-Usage:
-------
+Usage
+-----
 
 ```go
 var js = strings.NewReader(`
@@ -26,19 +26,19 @@ var s []string
 scan.ScanJSON(js, "/foo/bar[1]/moo", &s) // s should be ["foo", "bar"]
 ```
 
-Install:
---------
+Install
+-------
 
 ```
 go get github.com/mattn/go-scan
 ```
 
-License:
---------
+License
+-------
 
 MIT: http://mattn.mit-license.org/2013
 
-Author:
--------
+Author
+------
 
 Yasuhiro Matsumoto (mattn.jp@gmail.com)
