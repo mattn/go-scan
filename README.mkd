@@ -23,7 +23,7 @@ var js = strings.NewReader(`
 }
 `)
 var s []string
-scan.ScanJSON(js, "/foo/bar[1]/moo", &s)
+scan.ScanJSON(js, "/foo/bar[1]/moo", &s) // s should be ["foo", "bar"]
 ```
 
 Install:
