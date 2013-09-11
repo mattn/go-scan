@@ -4,7 +4,7 @@ go-scan
 [![Build Status](https://travis-ci.org/mattn/go-scan.png?branch=master)](https://travis-ci.org/mattn/go-scan)
 [![Coverage Status](https://coveralls.io/repos/mattn/go-scan/badge.png?branch=HEAD)](https://coveralls.io/r/mattn/go-scan?branch=HEAD)
 
-Easily way to get command line flags
+Easily way to get the elements via xpath like string
 
 Usage:
 ------
