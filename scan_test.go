@@ -148,6 +148,14 @@ func TestScanJSON(t *testing.T) {
 	if !reflect.DeepEqual([]float64{3, 2, 1}, f) {
 		t.Fatalf("Expected %v for Scan, but %v:", `[3, 2, 1]`, f)
 	}
+	var i int
+	err = ScanJSON(strings.NewReader(s), "/foo/bar[2]", &i)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if i != 1 {
+		t.Fatalf("Expected %v for Scan, but %v:", 2, i)
+	}
 }
 
 func TestScanPanic(t *testing.T) {
