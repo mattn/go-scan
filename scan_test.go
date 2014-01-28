@@ -282,4 +282,7 @@ func TestToError(t *testing.T) {
 	if err.Error() != "Unknown error" {
 		t.Fatalf("Expected unknown error but not")
 	}
+	if toError(nil) != nil {
+		t.Fatalf("Expected nil error but not")
+	}
 }
