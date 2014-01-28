@@ -210,7 +210,7 @@ func TestIndexWithMap(t *testing.T) {
 
 func TestScan(t *testing.T) {
 	var f float32
-	err := Scan("a", &f)
+	err := Scan(nil, &f)
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
