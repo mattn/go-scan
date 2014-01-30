@@ -17,6 +17,9 @@ func toError(v interface{}) error {
 		if e, ok := v.(error); ok {
 			return e
 		}
+		if e, ok := v.(string); ok {
+			return errors.New(e)
+		}
 		return errors.New("Unknown error")
 	}
 	return nil
