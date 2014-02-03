@@ -12,6 +12,7 @@ import (
 
 var re = regexp.MustCompile("^([^0-9\\s\\[][^\\s\\[]*)?(\\[[0-9]+\\])?$")
 
+// Any provide interface to scan any types.
 type Any interface{}
 
 func toError(v interface{}) error {
@@ -27,6 +28,7 @@ func toError(v interface{}) error {
 	return nil
 }
 
+// Scan work to scan any type to specified type
 func Scan(v interface{}, t interface{}) (err error) {
 	defer func() {
 		if err == nil {
@@ -57,6 +59,7 @@ func Scan(v interface{}, t interface{}) (err error) {
 	return nil
 }
 
+// ScanTree work to scan value to specified value with the path
 func ScanTree(v interface{}, p string, t interface{}) (err error) {
 	defer func() {
 		if err == nil {
@@ -117,6 +120,7 @@ func ScanTree(v interface{}, p string, t interface{}) (err error) {
 	return Scan(v, t)
 }
 
+// ScanJSON work as same sa ScanTree. it allow to give Reader.
 func ScanJSON(r io.Reader, p string, t interface{}) (err error) {
 	defer func() {
 		if err == nil {
