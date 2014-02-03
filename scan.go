@@ -12,6 +12,8 @@ import (
 
 var re = regexp.MustCompile("^([^0-9\\s\\[][^\\s\\[]*)?(\\[[0-9]+\\])?$")
 
+type Any interface{}
+
 func toError(v interface{}) error {
 	if v != nil {
 		if e, ok := v.(error); ok {
@@ -36,6 +38,10 @@ func Scan(v interface{}, t interface{}) (err error) {
 	tv := rv.Type().Kind()
 
 	if tv == reflect.Slice || tv == reflect.Array {
+		if _, ok := t.(*Any); ok {
+			rt.Set(rv)
+			return nil
+		}
 		ia := rv.Interface().([]interface{})
 		rt.Set(reflect.MakeSlice(rt.Type(), len(ia), len(ia)))
 		for n, _ := range ia {

@@ -138,6 +138,21 @@ func TestScanTreeSliceOfFloat64(t *testing.T) {
 	}
 }
 
+func TestScanAny(t *testing.T) {
+	s := `{"foo":{"bar": [3, 2, 1]}}`
+	var a Any
+	err := ScanJSON(strings.NewReader(s), "/foo/bar", &a)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var v interface{}
+	v = interface{}([]interface{}{3.0,2.0,1.0})
+	println(reflect.ValueOf(a).Type().String())
+	if !reflect.DeepEqual(v, a) {
+		t.Fatalf("Expected %v for Scan, but %v:", `[3, 2, 1]`, a)
+	}
+}
+
 func TestScanJSON(t *testing.T) {
 	s := `{"foo":{"bar": [3, 2, 1]}}`
 	var f []float64
