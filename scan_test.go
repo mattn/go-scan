@@ -194,7 +194,7 @@ func TestScanJSONError(t *testing.T) {
 }
 
 func TestIndexWithMap(t *testing.T) {
-	var js = strings.NewReader(`
+	var js = `
 {
 	"foo": {
 		"bar": [
@@ -213,10 +213,17 @@ func TestIndexWithMap(t *testing.T) {
 		}
 	}
 }
-`)
-	var s string
-	if err := ScanJSON(js, "/foo[1]/bag", &s); err != nil {
+`
+	var a interface{}
+	err := json.Unmarshal([]byte(js), &a)
+	if err != nil {
 		t.Fatal(err)
+	}
+	var s string
+	if err := ScanTree(a, "/foo[0]/bag", &s); err != nil {
+		if err := ScanTree(a, "/foo[1]/bag", &s); err != nil {
+			t.Fatal(err)
+		}
 	}
 	if s != "ddd" {
 		t.Fatalf(`Expected "ddd" but not`)
