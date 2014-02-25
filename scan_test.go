@@ -118,7 +118,7 @@ func TestScanTreeStringKeyMap(t *testing.T) {
 	}
 }
 
-func TestScanTreeInvalidMap(t *testing.T) {
+func TestScanTreeInterfaceKeyMap(t *testing.T) {
 	a := map[interface{}]interface{} {
 		"foo": map[string]interface{} {
 			"bar": "baz",
@@ -135,7 +135,21 @@ func TestScanTreeInvalidMap(t *testing.T) {
 	}
 }
 
-func TestScanTreeInterfaceKeyMap(t *testing.T) {
+func TestScanTreeInvalidKeyMap(t *testing.T) {
+	a := map[interface{}]interface{} {
+		"foo": map[string]interface{} {
+			"bar": "bar",
+		},
+		3: "baba",
+	}
+	var s string
+	err := ScanTree(a, "/foo/baz", &s)
+	if err == nil {
+		t.Fatalf("Expected error but not")
+	}
+}
+
+func TestScanTreeInvalidMap(t *testing.T) {
 	a := map[interface{}]interface{} {
 		"foo": map[string]interface{} {
 			"bar": func() {},
