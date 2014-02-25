@@ -151,13 +151,14 @@ func TestScanTreeInvalidKeyMap(t *testing.T) {
 
 func TestScanTreeInvalidMap(t *testing.T) {
 	a := map[interface{}]interface{} {
-		"foo": map[string]interface{} {
-			"bar": func() {},
+		"foo": []map[string]interface{} {
+			{"bar": func() {}},
+			{"barbar": func() {}},
 		},
 		3: "baba",
 	}
 	var s string
-	err := ScanTree(a, "/foo/bar", &s)
+	err := ScanTree(a, "/foo[0]", &s)
 	if err == nil {
 		t.Fatalf("Expected error but not")
 	}
