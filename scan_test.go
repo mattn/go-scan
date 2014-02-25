@@ -151,9 +151,9 @@ func TestScanTreeInvalidKeyMap(t *testing.T) {
 
 func TestScanTreeInvalidMap(t *testing.T) {
 	a := map[interface{}]interface{} {
-		"foo": []map[interface{}]interface{} {
-			{"bar": func() {}},
-			{"barbar": func() {}},
+		"foo": map[interface{}]interface{} {
+			"bar": func() {},
+			"barbar": func() {},
 		},
 		3: "baba",
 	}
@@ -287,7 +287,7 @@ func TestIndexWithMap(t *testing.T) {
 	var s string
 	if err := ScanTree(a, "/foo[0]/bag", &s); err != nil {
 		if err := ScanTree(a, "/foo[1]/bag", &s); err != nil {
-			t.Fatal(err)
+			s = "foo"
 		}
 	}
 	if s != "ddd" {
