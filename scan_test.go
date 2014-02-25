@@ -98,6 +98,42 @@ func TestScanTreeMap(t *testing.T) {
 	}
 }
 
+func TestScanTreeStringKeyMap(t *testing.T) {
+	var a map[string]interface{}
+	j :=
+		`
+{"foo":{"bar": "baz"}}
+`
+	err := json.Unmarshal([]byte(j), &a)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var s string
+	err = ScanTree(a, "/foo/bar", &s)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if s != "baz" {
+		t.Fatalf("Expected %v for Scan, but %v:", "baz", s)
+	}
+}
+
+func TestScanTreeInterfaceKeyMap(t *testing.T) {
+	a := map[interface{}]interface{} {
+		"foo": map[string]interface{} {
+			"bar": "baz",
+		},
+		3: "baba",
+	}
+	var s string
+	err := ScanTree(a, "/foo/bar", &s)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if s != "baz" {
+		t.Fatalf("Expected %v for Scan, but %v:", "baz", s)
+	}
+}
 func TestScanTreeSliceOfString(t *testing.T) {
 	var a interface{}
 	j :=
@@ -147,7 +183,6 @@ func TestScanAny(t *testing.T) {
 	}
 	var v interface{}
 	v = interface{}([]interface{}{3.0,2.0,1.0})
-	println(reflect.ValueOf(a).Type().String())
 	if !reflect.DeepEqual(v, a) {
 		t.Fatalf("Expected %v for Scan, but %v:", `[3, 2, 1]`, a)
 	}
