@@ -151,7 +151,7 @@ func TestScanTreeInvalidKeyMap(t *testing.T) {
 
 func TestScanTreeInvalidMap(t *testing.T) {
 	a := map[interface{}]interface{} {
-		"foo": []map[string]interface{} {
+		"foo": []map[interface{}]interface{} {
 			{"bar": func() {}},
 			{"barbar": func() {}},
 		},
