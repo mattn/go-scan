@@ -12,6 +12,9 @@ import (
 
 var re = regexp.MustCompile("^([^0-9\\s\\[][^\\s\\[]*)?(\\[[0-9]+\\])?$")
 
+var t1 = reflect.TypeOf((map[string]interface{})(nil))
+var t2 = reflect.TypeOf((map[interface{}]interface{})(nil))
+
 // Any provide interface to scan any types.
 type Any interface{}
 
@@ -77,16 +80,26 @@ func ScanTree(v interface{}, p string, t interface{}) (err error) {
 		}
 		ss := sl[0]
 		if ss[1] != "" {
+			rv := reflect.ValueOf(v)
+			rt := rv.Type()
+			if rt != t1 && rv.Type().ConvertibleTo(t1) {
+				v = rv.Convert(t1).Interface()
+			}
 			if vm, ok := v.(map[string]interface{}); ok {
 				if v, ok = vm[ss[1]]; !ok {
 					return errors.New("invalid path: " + ss[1])
 				}
-			} else if vm, ok := v.(map[interface{}]interface{}); ok {
-				if v, ok = vm[ss[1]]; !ok {
+			} else {
+				if rt != t2 && rv.Type().ConvertibleTo(t2) {
+					v = rv.Convert(t2).Interface()
+				}
+				if vm, ok := v.(map[interface{}]interface{}); ok {
+					if v, ok = vm[ss[1]]; !ok {
+						return errors.New("invalid path: " + ss[1])
+					}
+				} else {
 					return errors.New("invalid path: " + ss[1])
 				}
-			} else {
-				return errors.New("invalid path: " + ss[1])
 			}
 		}
 		if ss[2] != "" {
