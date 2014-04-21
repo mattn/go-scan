@@ -15,6 +15,10 @@ var js = strings.NewReader(`
 	"foo": {
 		"bar": [
 			{
+				"faz": true,
+				"moo": ["goo", "mar"]
+			},
+			{
 				"maz": true,
 				"moo": ["foo", "bar"]
 			}
