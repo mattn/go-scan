@@ -7,10 +7,9 @@ import (
 	"reflect"
 	"regexp"
 	"strconv"
-	"strings"
 )
 
-var re = regexp.MustCompile("^([^\\s\\[][^\\s\\[]*|\"[^\"]+\")?(\\[[0-9]+\\])?$")
+var re = regexp.MustCompile("^([^\\[]+)?(\\[[0-9]+\\])?$")
 
 var t1 = reflect.TypeOf((map[string]interface{})(nil))
 var t2 = reflect.TypeOf((map[interface{}]interface{})(nil))
@@ -62,6 +61,36 @@ func Scan(v interface{}, t interface{}) (err error) {
 	return nil
 }
 
+func split(s string) []string {
+	i := 0
+	a := []string{}
+	t := ""
+	rs := []rune(s)
+	l := len(rs)
+	for i < l {
+		r := rs[i]
+		switch r {
+		case '\\':
+			i++
+			if i < l {
+				t += string(rs[i])
+			}
+		case '/':
+			if t != "" {
+				a = append(a, t)
+				t = ""
+			}
+		default:
+			t += string(r)
+		}
+		i++
+	}
+	if t != "" {
+		a = append(a, t)
+	}
+	return a
+}
+
 // ScanTree work to scan value to specified value with the path
 func ScanTree(v interface{}, p string, t interface{}) (err error) {
 	defer func() {
@@ -73,7 +102,7 @@ func ScanTree(v interface{}, p string, t interface{}) (err error) {
 		return errors.New("invalid path")
 	}
 	var ok bool
-	for _, token := range strings.Split(p, "/") {
+	for _, token := range split(p) {
 		sl := re.FindAllStringSubmatch(token, -1)
 		if len(sl) == 0 {
 			return errors.New("invalid path")
@@ -146,7 +175,6 @@ func ScanTree(v interface{}, p string, t interface{}) (err error) {
 			}
 		}
 	}
-
 	return Scan(v, t)
 }
 

@@ -291,7 +291,7 @@ func TestIndexWithMap(t *testing.T) {
 		}
 	}
 	if s != "ddd" {
-		t.Fatalf(`Expected "ddd" but not`)
+		t.Fatalf(`Expected "ddd" but not`, s)
 	}
 }
 
@@ -381,3 +381,24 @@ func TestToError(t *testing.T) {
 		t.Fatalf("Expected nil error but not")
 	}
 }
+
+func TestSlash(t *testing.T) {
+	s := `{"foo bar":{"bar/baz": [3, 2, 1]}}`
+	var f []float64
+	err := ScanJSON(strings.NewReader(s), `/foo bar/bar\/baz`, &f)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual([]float64{3, 2, 1}, f) {
+		t.Fatalf("Expected %v for Scan, but %v:", `[3, 2, 1]`, f)
+	}
+	var i int
+	err = ScanJSON(strings.NewReader(s), `/foo bar/bar\/baz[2]`, &i)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if i != 1 {
+		t.Fatalf("Expected %v for Scan, but %v:", 2, i)
+	}
+}
+
