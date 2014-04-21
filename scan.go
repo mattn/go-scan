@@ -10,8 +10,7 @@ import (
 	"strings"
 )
 
-var re1 = regexp.MustCompile("^([^0-9\\s\\[][^\\s\\[]*|\"[^\"]+\")?(\\[[0-9]+\\])?$")
-var re2 = regexp.MustCompile("^\"[^\"]+\"$")
+var re = regexp.MustCompile("^([^\\s\\[][^\\s\\[]*|\"[^\"]+\")?(\\[[0-9]+\\])?$")
 
 var t1 = reflect.TypeOf((map[string]interface{})(nil))
 var t2 = reflect.TypeOf((map[interface{}]interface{})(nil))
@@ -75,15 +74,12 @@ func ScanTree(v interface{}, p string, t interface{}) (err error) {
 	}
 	var ok bool
 	for _, token := range strings.Split(p, "/") {
-		sl := re1.FindAllStringSubmatch(token, -1)
+		sl := re.FindAllStringSubmatch(token, -1)
 		if len(sl) == 0 {
 			return errors.New("invalid path")
 		}
 		ss := sl[0]
 		if ss[1] != "" {
-			if re2.MatchString(ss[1]) {
-				ss[1] = ss[1][1:len(ss[1])-1]
-			}
 			rv := reflect.ValueOf(v)
 			rt := rv.Type()
 			if rt != t1 && rv.Type().ConvertibleTo(t1) {
