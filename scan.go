@@ -52,7 +52,7 @@ func Scan(v interface{}, t interface{}) (err error) {
 			rt.Index(n).Set(rv.Index(n).Elem())
 		}
 	} else {
-		if rv.Type().ConvertibleTo(rv.Type()) {
+		if rv.Type().ConvertibleTo(rt.Type()) {
 			rt.Set(rv.Convert(rt.Type()))
 		} else {
 			rt.Set(rv)
