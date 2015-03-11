@@ -234,7 +234,7 @@ func TestScanJSON(t *testing.T) {
 		t.Fatal(err)
 	}
 	if i != 1 {
-		t.Fatalf("Expected %v for Scan, but %v:", 2, i)
+		t.Fatalf("Expected %v for Scan, but %v:", 1, i)
 	}
 }
 
@@ -398,7 +398,6 @@ func TestSlash(t *testing.T) {
 		t.Fatal(err)
 	}
 	if i != 1 {
-		t.Fatalf("Expected %v for Scan, but %v:", 2, i)
+		t.Fatalf("Expected %v for Scan, but %v:", 1, i)
 	}
 }
-
