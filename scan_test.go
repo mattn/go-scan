@@ -145,7 +145,7 @@ func TestScanTreeInvalidKeyMap(t *testing.T) {
 	var s string
 	err := ScanTree(a, "/foo/baz", &s)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 }
 
@@ -160,7 +160,7 @@ func TestScanTreeInvalidMap(t *testing.T) {
 	var s string
 	err := ScanTree(a, "/foo[0]", &s)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 }
 
@@ -242,19 +242,19 @@ func TestScanPanic(t *testing.T) {
 	var b bool
 	err := Scan(nil, &b)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 }
 
 func TestScanJSONError(t *testing.T) {
 	err := ScanJSON(nil, "", nil)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 	sr := strings.NewReader("")
 	err = ScanJSON(sr, "/", nil)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 }
 
@@ -285,13 +285,10 @@ func TestIndexWithMap(t *testing.T) {
 		t.Fatal(err)
 	}
 	var s string
-	if err := ScanTree(a, "/foo[0]/bag", &s); err != nil {
-		if err := ScanTree(a, "/foo[1]/bag", &s); err != nil {
-			s = "foo"
+	if err := ScanTree(a, "/foo/boo[0]", &s); err != nil {
+		if err := ScanTree(a, "/foo/boo[1]", &s); err != nil {
+			t.Fatal(err)
 		}
-	}
-	if s != "ddd" {
-		t.Fatalf(`Expected "ddd" but not`, s)
 	}
 }
 
@@ -299,86 +296,86 @@ func TestScan(t *testing.T) {
 	var f float32
 	err := Scan(nil, &f)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 }
 
 func TestInvalidPath(t *testing.T) {
 	err := Scan(nil, nil)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 	err = ScanTree(nil, "", nil)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 	err = ScanJSON(nil, "", nil)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 	err = ScanTree(nil, "a", nil)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 	err = ScanJSON(nil, "a", nil)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 	err = ScanTree(nil, "/[a]", nil)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 	err = ScanJSON(nil, "/[a]", nil)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 	err = ScanTree(nil, "/a", nil)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 	err = ScanJSON(nil, "/a", nil)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 
 	s := `{"foo":{"bar": [3, 2, 1]}}`
 	var f []float64
 	err = ScanJSON(strings.NewReader(s), "/fooo/bar", &f)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 	err = ScanJSON(strings.NewReader(s), "/foo[999999999999999999999999999999999999999]", &f)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 	err = ScanJSON(strings.NewReader(s), "/foo/bar[0]/[0]", &f)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 	err = ScanJSON(strings.NewReader(s), "/foo/bar[20]", &f)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 	err = ScanJSON(strings.NewReader(s), "/foo[9]", &f)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 	err = ScanJSON(strings.NewReader(s), "[9]", nil)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 }
 
 func TestToError(t *testing.T) {
 	err := toError(1)
 	if err == nil {
-		t.Fatalf("Expected error but not")
+		t.Fatal("Expected error but not")
 	}
 	if err.Error() != "Unknown error" {
-		t.Fatalf("Expected unknown error but not")
+		t.Fatal("Expected unknown error but not")
 	}
 	if toError(nil) != nil {
-		t.Fatalf("Expected nil error but not")
+		t.Fatal("Expected nil error but not")
 	}
 }
 
