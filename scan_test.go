@@ -119,8 +119,8 @@ func TestScanTreeStringKeyMap(t *testing.T) {
 }
 
 func TestScanTreeInterfaceKeyMap(t *testing.T) {
-	a := map[interface{}]interface{} {
-		"foo": map[string]interface{} {
+	a := map[interface{}]interface{}{
+		"foo": map[string]interface{}{
 			"bar": "baz",
 		},
 		3: "baba",
@@ -136,8 +136,8 @@ func TestScanTreeInterfaceKeyMap(t *testing.T) {
 }
 
 func TestScanTreeInvalidKeyMap(t *testing.T) {
-	a := map[interface{}]interface{} {
-		"foo": map[string]interface{} {
+	a := map[interface{}]interface{}{
+		"foo": map[string]interface{}{
 			"bar": "bar",
 		},
 		3: "baba",
@@ -150,9 +150,9 @@ func TestScanTreeInvalidKeyMap(t *testing.T) {
 }
 
 func TestScanTreeInvalidMap(t *testing.T) {
-	a := map[interface{}]interface{} {
-		"foo": map[interface{}]interface{} {
-			"bar": func() {},
+	a := map[interface{}]interface{}{
+		"foo": map[interface{}]interface{}{
+			"bar":    func() {},
 			"barbar": func() {},
 		},
 		3: "baba",
@@ -212,7 +212,7 @@ func TestScanAny(t *testing.T) {
 		t.Fatal(err)
 	}
 	var v interface{}
-	v = interface{}([]interface{}{3.0,2.0,1.0})
+	v = interface{}([]interface{}{3.0, 2.0, 1.0})
 	if !reflect.DeepEqual(v, a) {
 		t.Fatalf("Expected %v for Scan, but %v:", `[3, 2, 1]`, a)
 	}
