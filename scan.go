@@ -48,7 +48,7 @@ func Scan(v interface{}, t interface{}) (err error) {
 		}
 		ia := rv.Interface().([]interface{})
 		rt.Set(reflect.MakeSlice(rt.Type(), len(ia), len(ia)))
-		for n, _ := range ia {
+		for n := range ia {
 			rt.Index(n).Set(rv.Index(n).Elem())
 		}
 	} else {
