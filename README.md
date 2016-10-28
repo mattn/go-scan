@@ -22,7 +22,7 @@ var js = strings.NewReader(`
 				"maz": true,
 				"moo": ["foo", "bar"]
 			}
-		],
+		]
 	}
 }
 `)
