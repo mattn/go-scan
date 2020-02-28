@@ -398,3 +398,34 @@ func TestSlash(t *testing.T) {
 		t.Fatalf("Expected %v for Scan, but %v:", 1, i)
 	}
 }
+
+func TestScanNull(t *testing.T) {
+	s := `{"foo":null}`
+	scan := func(i interface{}) error {
+		return ScanJSON(strings.NewReader(s), "/foo", i)
+	}
+
+	a := []interface{}{}
+	err := scan(&a)
+	if err != nil {
+		t.Error(err)
+	} else if a != nil {
+		t.Error("Expected an array to be nil")
+	}
+
+	m := map[string]interface{}{}
+	err = scan(&m)
+	if err != nil {
+		t.Error(err)
+	} else if m != nil {
+		t.Error("Expected a map to be nil")
+	}
+
+	var any Any
+	err = scan(&any)
+	if err != nil {
+		t.Error(err)
+	} else if any != nil {
+		t.Error("Expected an Any to be nil")
+	}
+}
