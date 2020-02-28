@@ -30,6 +30,16 @@ func toError(v interface{}) error {
 	return nil
 }
 
+func isNillable(v reflect.Value) bool {
+	switch v.Kind() {
+	case reflect.Chan, reflect.Func, reflect.Map, reflect.Ptr,
+		reflect.UnsafePointer, reflect.Interface, reflect.Slice:
+		return true
+	default:
+		return false
+	}
+}
+
 // Scan work to scan any type to specified type
 func Scan(v interface{}, t interface{}) (err error) {
 	defer func() {
@@ -39,6 +49,13 @@ func Scan(v interface{}, t interface{}) (err error) {
 	}()
 	rt := reflect.ValueOf(t).Elem()
 	rv := reflect.ValueOf(v)
+	if v == nil || (isNillable(rv) && rv.IsNil()) {
+		if !isNillable(rt) {
+			return errors.New("nil is not assignable")
+		}
+		rt.Set(reflect.Zero(rt.Type()))
+		return nil
+	}
 	tv := rv.Type().Kind()
 
 	if tv == reflect.Slice || tv == reflect.Array {
